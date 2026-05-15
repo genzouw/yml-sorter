@@ -196,7 +196,7 @@ describe('indent flag', () => {
     `);
   });
 
-  test('that -id flag works', () => {
+  test('that --id flag works', () => {
     const result = indentCheck('--id');
     expect(result).toMatchInlineSnapshot(`
       "a:
