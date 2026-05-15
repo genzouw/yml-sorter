@@ -1,13 +1,13 @@
-const execSync = require("child_process").execSync;
-const fs = require("fs");
+const execSync = require('child_process').execSync;
+const fs = require('fs');
 
-const tmpDir = "./tmp";
+const tmpDir = './tmp';
 
 beforeEach(() => prepareTmpDirectory());
 
-describe("input flag", () => {
-  test("that --input flag works", () => {
-    const result = inputCheck("--input");
+describe('input flag', () => {
+  test('that --input flag works', () => {
+    const result = inputCheck('--input');
     expect(result).toMatchInlineSnapshot(`
       "a:
         b: World
@@ -24,8 +24,8 @@ describe("input flag", () => {
     `);
   });
 
-  test("that -i flag works", () => {
-    const result = inputCheck("-i");
+  test('that -i flag works', () => {
+    const result = inputCheck('-i');
     expect(result).toMatchInlineSnapshot(`
       "a:
         b: World
@@ -48,15 +48,15 @@ describe("input flag", () => {
     // It should have overwritten the file and not create a new one
     const files = fs.readdirSync(tmpDir);
     expect(files.length).toBe(1);
-    expect(files).toEqual(["simple.yml"]);
+    expect(files).toEqual(['simple.yml']);
 
-    return fs.readFileSync(`${tmpDir}/simple.yml`, "utf-8");
+    return fs.readFileSync(`${tmpDir}/simple.yml`, 'utf-8');
   }
 });
 
-describe("output flag", () => {
-  test("that --output flag works", () => {
-    const result = outputCheck("--output");
+describe('output flag', () => {
+  test('that --output flag works', () => {
+    const result = outputCheck('--output');
     expect(result).toMatchInlineSnapshot(`
       "a:
         b: World
@@ -73,8 +73,8 @@ describe("output flag", () => {
     `);
   });
 
-  test("that -o flag works", () => {
-    const result = outputCheck("-o");
+  test('that -o flag works', () => {
+    const result = outputCheck('-o');
     expect(result).toMatchInlineSnapshot(`
       "a:
         b: World
@@ -93,21 +93,21 @@ describe("output flag", () => {
 
   function outputCheck(flag) {
     execSync(
-      `node index.js --input ${tmpDir}/simple.yml ${flag} ${tmpDir}/output.yml`
+      `node index.js --input ${tmpDir}/simple.yml ${flag} ${tmpDir}/output.yml`,
     );
 
     // It should have created a new file
     const files = fs.readdirSync(tmpDir);
     expect(files.length).toBe(2);
-    expect(files).toEqual(["output.yml", "simple.yml"]);
+    expect(files).toEqual(['output.yml', 'simple.yml']);
 
-    return fs.readFileSync(`${tmpDir}/output.yml`, "utf-8");
+    return fs.readFileSync(`${tmpDir}/output.yml`, 'utf-8');
   }
 });
 
-describe("dry-run flag", () => {
-  test("that --dry-run flag works", () => {
-    const result = dryRunCheck("--dry-run");
+describe('dry-run flag', () => {
+  test('that --dry-run flag works', () => {
+    const result = dryRunCheck('--dry-run');
     expect(result).toMatchInlineSnapshot(`
       "a:
         b: World
@@ -125,8 +125,8 @@ describe("dry-run flag", () => {
     `);
   });
 
-  test("that -d flag works", () => {
-    const result = dryRunCheck("-d");
+  test('that -d flag works', () => {
+    const result = dryRunCheck('-d');
     expect(result).toMatchInlineSnapshot(`
       "a:
         b: World
@@ -144,8 +144,8 @@ describe("dry-run flag", () => {
     `);
   });
 
-  test("that -d with true", () => {
-    const result = dryRunCheck("-d true");
+  test('that -d with true', () => {
+    const result = dryRunCheck('-d true');
     expect(result).toMatchInlineSnapshot(`
       "a:
         b: World
@@ -165,21 +165,21 @@ describe("dry-run flag", () => {
 
   function dryRunCheck(flag) {
     const result = execSync(
-      `node index.js --input ${tmpDir}/simple.yml ${flag}`
+      `node index.js --input ${tmpDir}/simple.yml ${flag}`,
     );
 
     // It should have run without creating a file because it was dry run
     const files = fs.readdirSync(tmpDir);
     expect(files.length).toBe(1);
-    expect(files).toEqual(["simple.yml"]);
+    expect(files).toEqual(['simple.yml']);
 
     return result.toString();
   }
 });
 
-describe("indent flag", () => {
-  test("that --indent flag works", () => {
-    const result = indentCheck("--indent");
+describe('indent flag', () => {
+  test('that --indent flag works', () => {
+    const result = indentCheck('--indent');
     expect(result).toMatchInlineSnapshot(`
       "a:
               b: World
@@ -196,8 +196,8 @@ describe("indent flag", () => {
     `);
   });
 
-  test("that -id flag works", () => {
-    const result = indentCheck("--id");
+  test('that -id flag works', () => {
+    const result = indentCheck('--id');
     expect(result).toMatchInlineSnapshot(`
       "a:
               b: World
@@ -221,15 +221,15 @@ describe("indent flag", () => {
     // with an indent of 8
     const files = fs.readdirSync(tmpDir);
     expect(files.length).toBe(1);
-    expect(files).toEqual(["simple.yml"]);
+    expect(files).toEqual(['simple.yml']);
 
-    return fs.readFileSync(`${tmpDir}/simple.yml`, "utf-8");
+    return fs.readFileSync(`${tmpDir}/simple.yml`, 'utf-8');
   }
 });
 
-describe("help flag", () => {
-  test("that --help flag works", () => {
-    const result = helpCheck("--help");
+describe('help flag', () => {
+  test('that --help flag works', () => {
+    const result = helpCheck('--help');
     expect(result).toMatchInlineSnapshot(`
       "Usage: yml-sorter [options]
 
@@ -252,8 +252,8 @@ describe("help flag", () => {
     `);
   });
 
-  test("that -h flag works", () => {
-    const result = helpCheck("-h");
+  test('that -h flag works', () => {
+    const result = helpCheck('-h');
     expect(result).toMatchInlineSnapshot(`
       "Usage: yml-sorter [options]
 
@@ -277,19 +277,21 @@ describe("help flag", () => {
   });
 
   function helpCheck(flag) {
-    const result = execSync(`node index.js ${flag}`);
+    const result = execSync(`node index.js ${flag}`, {
+      env: { ...process.env, LC_ALL: 'C', LANG: 'C' },
+    });
 
     return result.toString();
   }
 });
 
-const examplesDir = "./examples";
+const examplesDir = './examples';
 
 // Clears / creates tmp directory and copies all examples so they
 // remain pristine.
 function prepareTmpDirectory() {
   if (fs.existsSync(tmpDir)) {
-    fs.rmdirSync(tmpDir, { recursive: true });
+    fs.rmSync(tmpDir, { recursive: true, force: true });
   }
   fs.mkdirSync(tmpDir);
 
