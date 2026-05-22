@@ -37,18 +37,31 @@ reviews:
       - main
 
   path_instructions:
-    - path: "**/*.{js,mjs,cjs}"
+    - path: "{**/*.{js,mjs,cjs,ts,tsx},package.json}"
       instructions: |
-        Node.js / JavaScript コードとしてレビューしてください:
+        Node.js / JavaScript / TypeScript コードとしてレビューしてください:
         - 外部入力をそのまま `eval` / `Function` / `child_process.exec` へ流していないか。
         - 例外を握り潰さず、ログ／終了コードが妥当に扱われているか。
         - 依存パッケージのバージョン整合・既知脆弱性の混入が無いか。
+        - `package.json` の場合は依存関係の追加・変更・削除が意図的かを確認する。
     - path: ".github/workflows/**"
       instructions: |
         GitHub Actions ワークフローとしてレビューしてください:
         - シークレットの露出 (echo / set-output 経由のリーク) が無いか。
         - 外部 action は SHA pin されているか。
         - permissions: が最小権限になっているか。
+    - path: "**/Dockerfile*"
+      instructions: |
+        Dockerfile としてレビューしてください:
+        - 秘密情報（API キー等）が ENV または COPY でイメージ層に混入していないか。
+        - ベースイメージのタグが固定（latest 以外）されているか。
+        - 不要なパッケージやキャッシュが最終イメージに残っていないか。
+    - path: "**/*.{sh,bash}"
+      instructions: |
+        Shell スクリプトとしてレビューしてください:
+        - 外部入力をそのまま eval やコマンド置換に渡していないか。
+        - パス・ファイル名にスペースが含まれる場合のクォートが適切か。
+        - エラーハンドリング（set -e / set -u 等）が適切か。
 
   # 生成物 / 依存物などはレビュー対象から除外する。
   # ロックファイルは推移的依存の脆弱性診断に必要なため除外しない。
