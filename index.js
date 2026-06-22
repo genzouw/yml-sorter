@@ -1,7 +1,32 @@
 #! /usr/bin/env node
 
 const yaml = require('js-yaml');
-const fs = require('fs');
+const fs = require('node:fs');
+
+// Sorts the keys of the given yml file and writes the result back (or prints it
+// for a dry run). Extracted from the bootstrap below so that the async entry
+// point stays small.
+function sortYamlFile(argv) {
+  try {
+    const doc = yaml.load(fs.readFileSync(argv.input, 'utf8'));
+
+    const sorted = yaml.dump(doc, { sortKeys: true, indent: argv.indent });
+
+    if (argv['dry-run']) {
+      console.log(sorted);
+    } else {
+      const output = argv.output ? argv.output : argv.input;
+
+      fs.writeFile(output, sorted, (error) => {
+        if (error) {
+          return console.error(error);
+        }
+      });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 // yargs v18 is ESM-only, so it must be loaded via dynamic import from this
 // CommonJS entry point.
@@ -52,24 +77,5 @@ const fs = require('fs');
     .epilog('With love from 42.nl')
     .wrap(null).argv;
 
-  // Get document, or throw exception on error
-  try {
-    const doc = yaml.load(fs.readFileSync(argv.input, 'utf8'));
-
-    const input = yaml.dump(doc, { sortKeys: true, indent: argv.indent });
-
-    if (argv['dry-run']) {
-      console.log(input);
-    } else {
-      const output = argv.output ? argv.output : argv.input;
-
-      fs.writeFile(output, input, (error) => {
-        if (error) {
-          return console.error(error);
-        }
-      });
-    }
-  } catch (error) {
-    console.error(error);
-  }
+  sortYamlFile(argv);
 })();
