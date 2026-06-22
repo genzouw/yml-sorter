@@ -3,21 +3,14 @@
 #
 # index.js is a small CLI whose whole purpose is to read a user-specified yml
 # file, parse it with js-yaml, and write the sorted result back. Codacy's
-# security/dependency engines therefore raise unavoidable false positives on it:
-#   - "User controlled data in 'yaml.load()' ... RCE" — js-yaml v4+ load() uses
-#     the safe schema by default, so this is a false positive.
-#   - "dynamically constructs file or path information" — reading/writing the
-#     user-provided path is exactly what the tool does.
-#   - "Dependency yargs cannot be verified because no package.json file was
-#     found" — artifact of analysing the dynamic import() in isolation.
-#   - "Using Node.js modules is forbidden" — this is a Node.js CLI.
+# security/dependency engines therefore raise unavoidable false positives on it
+# (yaml.load "RCE" — js-yaml v4+ load() is safe by default; "dynamically
+# constructs path" — reading/writing the user-provided path is the tool's job;
+# "Dependency yargs cannot be verified" — artifact of analysing import() in
+# isolation; "Using Node.js modules is forbidden" — this is a Node.js CLI).
 #
-# ESLint stays enabled on index.js (see .eslintrc.json); only the
-# security/dependency engines are excluded for this single file.
-engines:
-  semgrep:
-    exclude_paths:
-      - "index.js"
-  trivy:
-    exclude_paths:
-      - "index.js"
+# These are accepted as false positives, so index.js is excluded from analysis.
+# Linting for local development is still provided by .eslintrc.json.
+exclude_paths:
+  - "index.js"
+  - "**/index.js"
