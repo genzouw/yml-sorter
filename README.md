@@ -10,7 +10,7 @@ The tool is basically a tiny wrapper around the great [js-yaml](https://github.c
 
 # Usage
 
-```
+```text
 Usage: yml-sorter [options]
 
 Options:
