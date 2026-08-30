@@ -111,4 +111,5 @@ Issue では「なぜ既存の無料サービスでは目的を達成できな�
 
 ## 7. 本ポリシーの適用範囲
 
-本ポリシーは [@genzouw](https://github.com/genzouw) が公開しているすべての公開リポジトリに共通で適用されます。
+本ポリシーは、このファイルが配置されているリポジトリ [`genzouw/yml-sorter`](https://github.com/genzouw/yml-sorter) にのみ適用されます。
+[agents.md 規格](https://agents.md/) の自動読込は、AGENTS.md が実際に配置されたリポジトリ単位で行われるため、[@genzouw](https://github.com/genzouw) の他の公開リポジトリへ本ポリシーを適用したい場合は、当該リポジトリのルートに個別に AGENTS.md を配置するか、共有読込の仕組みを別途 Issue で検討してください。
