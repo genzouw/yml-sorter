@@ -61,6 +61,16 @@
       "addLabels": [
         "npm"
       ]
+    },
+    {
+      "description": [
+        "npm は公開から 72 時間は unpublish できるため、その期間を越えるまで待つ。",
+        "unpublish された版を package-lock.json に固定すると npm ci が解決できずに CI が壊れる。"
+      ],
+      "matchDatasources": [
+        "npm"
+      ],
+      "minimumReleaseAge": "3 days"
     }
   ]
 }
